@@ -1,0 +1,28 @@
+{
+  "name": "static-server-zl",
+  "version": "1.0.0",
+  "description": "实现一个静态服务，通过static-server-zl启动，类似http-server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "zl-server": "./bin/www.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhangli20080808/static-server-zl.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhangli20080808/static-server-zl/issues"
+  },
+  "homepage": "https://github.com/zhangli20080808/static-server-zl#readme",
+  "dependencies": {
+    "commander": "^8.2.0",
+    "mime": "^2.5.2",
+    "yargs": "^17.2.1"
+  }
+}
