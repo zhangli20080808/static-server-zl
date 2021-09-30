@@ -1,6 +1,8 @@
 /**
   <!-- 如果有js语法，需要使用<%%> -->
   <!-- 如果要显示值 <%=%> -->
+  服务端渲染 - 直接返回了一个字符串 包含完整的html和内容
+  单页面应用 - webpack js -> 
  */
 let http = require('http');
 let path = require('path');
@@ -47,7 +49,15 @@ class Server {
         let arr = await fs.readdir(absPath);
         // 需要根据dir生成一个html字符串，生成到页面上，通过模板引擎，通过一个对象，合并成一个页面，送给 浏览器
         // ejs
-        const r = await renderFile(renderTemplatePath, { arr: arr });
+        // arr 需要单独处理一下  点击的路劲
+        let dirs = arr.map((item) => {
+          return {
+            path: path.join(pathname, item),
+            dir: item,
+          };
+        });
+        const r = await renderFile(renderTemplatePath, { arr: dirs });
+        res.setHeader('Content-Type', 'text/html;charset=utf-8');
         res.end(r);
       }
     } catch (e) {
@@ -57,7 +67,11 @@ class Server {
   //
   sendFile(req, res, absPath) {
     // 采用流的方式 pipe  原理就是 监听 on data事件 ，拿到数据之后会调用 res.write,end方法把结果抛出去
-    res.setHeader('Content-Type', mime.getType(absPath), 'charset=utf-8');
+    res.setHeader(
+      'Content-Type',
+      mime.getType(absPath) || 'text/plain',
+      'charset=utf-8'
+    );
     // 注意 异步读取
     createReadStream(absPath).pipe(res);
   }
