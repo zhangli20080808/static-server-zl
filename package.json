@@ -23,6 +23,7 @@
   "homepage": "https://github.com/zhangli20080808/static-server-zl#readme",
   "dependencies": {
     "commander": "^8.2.0",
+    "ejs": "^3.1.6",
     "mime": "^2.5.2",
     "yargs": "^17.2.1"
   }

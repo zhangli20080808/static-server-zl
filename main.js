@@ -1,10 +1,20 @@
+/**
+  <!-- 如果有js语法，需要使用<%%> -->
+  <!-- 如果要显示值 <%=%> -->
+ */
 let http = require('http');
 let path = require('path');
 let url = require('url');
 let fs = require('fs').promises;
 let { createReadStream } = require('fs'); // 可读流，可写流
 let mime = require('mime');
+// ejs 将对象渲染好，拼接成一个字符
+const ejs = require('ejs');
+const { promisify } = require('util');
+const renderFile = promisify(ejs.renderFile);
 
+const renderTemplatePath = path.resolve(__dirname, 'template.html');
+// renderFile(renderTemplatePath, { arr: [1, 2, 3] });
 const merge = (config) => {
   // 当前运行哪个命令时的目录,当前工作目录
   return {
@@ -32,6 +42,13 @@ class Server {
       if (statObj.isFile()) {
         // 如果是文件，需要读取文件中的内容
         this.sendFile(req, res, absPath);
+      } else {
+        // 文件夹
+        let arr = await fs.readdir(absPath);
+        // 需要根据dir生成一个html字符串，生成到页面上，通过模板引擎，通过一个对象，合并成一个页面，送给 浏览器
+        // ejs
+        const r = await renderFile(renderTemplatePath, { arr: arr });
+        res.end(r);
       }
     } catch (e) {
       this.sendError(req, res, e);
